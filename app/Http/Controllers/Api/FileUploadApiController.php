@@ -204,13 +204,71 @@ class FileUploadApiController extends Controller
     {
         
         try {
-            // $files = Files::all();
-            $files =Files::orderBy('created_at','desc')->where('user_account',Auth::user()->user_account)->orderBy('id', 'desc')->take(10)->get();
-            // $files = DB::table('files')->get();
-            // dd(DB::table('files')->get());
+            // $files =Files::orderBy('created_at','desc')->where('user_account',Auth::user()->user_account)->orderBy('id', 'desc')->take(10)->get();
+            $files =Files::orderBy('created_at','desc')->where('user_account',Auth::user()->user_account)->paginate(6);
+            return response($files,200);
+            // return $this->success("Get All Files", $files);
+        } catch (\Exception $e) {
+            // return $this->error($e->getMessage(), $e->getCode());
+            return response($e->getMessage(),500);
+        }
+
+    }
+
+     /**
+     * load_latest_file
+     *
+     * 取得最新偵測圖檔.
+     * @group File Management
+     * @authenticated
+     * @response 400 scenario="Service is unhealthy" {"status": "down", "services": {"database": "up", "redis": "down"}}
+     * @responseField message 提示訊息   
+     * @responseField error bool 錯誤狀態 
+     * @responseField code int HTTP Code  
+     * @responseField results json 回傳結果 
+     */
+    public function load_latest_file(Request $request)
+    {
+        
+        try {
+            $files =Files::orderBy('created_at','desc')->where('user_account',Auth::user()->user_account)->orderBy('id', 'desc')->take(1)->get();
+            // $files =Files::orderBy('created_at','desc')->where('user_account',Auth::user()->user_account)->paginate(6);
+            // return response($files,200);
             return $this->success("Get All Files", $files);
         } catch (\Exception $e) {
             // return $this->error($e->getMessage(), $e->getCode());
+            return response($e->getMessage(),500);
+        }
+
+    }
+
+     /**
+     * delete_all_file
+     *
+     * 刪除圖檔.
+     * @group File Management
+     * @authenticated
+     * @response 400 scenario="Service is unhealthy" {"status": "down", "services": {"database": "up", "redis": "down"}}
+     * @responseField message 提示訊息   
+     * @responseField error bool 錯誤狀態 
+     * @responseField code int HTTP Code  
+     * @responseField results json 回傳結果 
+     */
+    public function delete_all_file(Request $request)
+    {
+        
+        try {
+            $folder_name=Auth::user()->user_account;
+            $path="storage/files/{$folder_name}";
+            DB::beginTransaction();
+            if (\File::exists($path)){
+                \File::deleteDirectory($path);
+                Files::truncate();
+            }
+            DB::commit();
+            return $this->success("Remove All Files", null);
+        } catch (\Exception $e) {
+            DB::rollback();
             return response($e->getMessage(),500);
         }
 

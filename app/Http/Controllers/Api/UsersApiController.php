@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Auth\Events\Registered;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -47,7 +47,7 @@ class UsersApiController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password'])
         ]);
-
+        event(new Registered($user));
         // And created user until here.
 
         // $client = Client::where('password_client', 1)->first();
@@ -69,6 +69,7 @@ class UsersApiController extends Controller
             'oauth/token',
             'POST'
         );
+
         return \Route::dispatch($token);
     }
 

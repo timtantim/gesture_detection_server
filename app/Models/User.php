@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 // use Laravel\Sanctum\HasApiTokens;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
