@@ -62,3 +62,11 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 安專步驟指令(開啟終端機)
+1. composer install
+2. npm install
+3. 建立.env 檔案，設定好資料庫、mailer 等環境變數(專案會用到寄信功能才須設定)
+4. php artisan key:generate
+5. php artisan migrate
+6. php artisan passport:install
