@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Auth;
 use DB;
+use Logger;
 use Facade\FlareClient\Http\Response;
 
 class UsersApiController extends Controller
@@ -103,7 +104,9 @@ class UsersApiController extends Controller
                 'POST'
             );
             $response=json_decode( \Route::dispatch($token)->getOriginalContent());
-            $response->user_account=Auth::user()->user_account;
+            $user_account=Auth::user()->user_account;
+            $response->user_account=$user_account;
+            Logger::info("用戶 $user_account 登入",__FILE__,__LINE__);
             // dd($token);
             return response(json_encode( $response),200);
             //
