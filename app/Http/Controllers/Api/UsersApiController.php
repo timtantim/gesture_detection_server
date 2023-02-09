@@ -86,9 +86,8 @@ class UsersApiController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
- 
         if (Auth::attempt($credentials)) {
-
+            
             $client = DB::table('oauth_clients')->where('password_client',1)->first();
             $request->request->add([
                 'grant_type' => 'password',
