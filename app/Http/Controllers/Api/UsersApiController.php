@@ -82,7 +82,6 @@ class UsersApiController extends Controller
      */
     public function authentication(Request $request)
     {
-
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
