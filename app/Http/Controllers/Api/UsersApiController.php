@@ -104,6 +104,7 @@ class UsersApiController extends Controller
             $response=json_decode( \Route::dispatch($token)->getOriginalContent());
             $user_account=Auth::user()->user_account;
             $response->user_account=$user_account;
+            Logger::db_log($user_account,__FILE__,__LINE__,$request->all(),200,$response,'登入');
             Logger::info("用戶 $user_account 登入",__FILE__,__LINE__);
             // dd($token);
             return response(json_encode( $response),200);
